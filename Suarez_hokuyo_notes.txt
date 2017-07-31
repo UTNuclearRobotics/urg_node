@@ -1,0 +1,62 @@
+First plugged in all hokuyo connections.
+
+Created an hokuyo_ws:
+cd ~/
+mkdir -p ~/hokuyo_ws/src
+catkin build
+
+Git cloned the urg_node
+cd ~/hokuyo/src
+git clone --recursive https://github.com/ros-drivers/urg_node.git
+
+Needed to install a couple of ros pacakges to build correctly:
+sudo apt install ros-kinetic-laser-proc
+sudo apt isntall ros-kinetic-urg-c
+
+Built the hokuyo_ws with the urg_node package
+catkin build
+source ~/hokuyo_ws/devel/setup.bash
+
+MIGHT NOT NEED THIS STEP	Created a new ethernet connection:
+MIGHT NOT NEED THIS STEP	Top right connections -> Edit Connections -> Add
+MIGHT NOT NEED THIS STEP	Select Ethernet -> Create
+MIGHT NOT NEED THIS STEP	Tab IPv4 Settings -> Select Manual from drop down -> Add
+MIGHT NOT NEED THIS STEP	Enter 192.168.0.10 Address -> Enter 
+MIGHT NOT NEED THIS STEP	Enter 255.255.255.0 Netmask-> Enter 
+MIGHT NOT NEED THIS STEP	Enter 192.168.0.1 Gateway -> Enter -> Save
+
+Messed with the internal networking interfaces
+sudo gedit /etc/network/interfaces
+	Added the following lines to force the static ip address of the computer to 192.168.0.15
+
+	"# The primary network interface:
+	 auto enp2s0
+	 iface enp2s0 inet static
+	 address 192.168.0.15
+	 netmask 255.255.255.0
+	 gateway 192.168.0.1"
+
+sudo reboot
+--after reboot--
+sudo ip addr flush enp2s0
+sudo systemctl restart networking.service
+sudo reboot
+--after reboot--
+
+Now if the network manager does not display the ethernet ports to manage you can fix this with:
+sudo gedit /etc/NetworkManager/NetworkManager.conf
+	changed the line "managed=false" to "managed=true"
+sudo service network-manager restart
+
+Via the network manager connected to the ifupdown (enp2s0)
+
+open terminal 1:
+roscore
+open terminal 2:
+source hokuyo_ws/devel/setup.bash
+rosrun urg_node getID 192.168.0.10:10940
+--output should git the ID of the hokuyo device
+--in my case is was H1645521
+rosrun urg_node urg_node _ip_address:="192.168.0.10"
+
+
