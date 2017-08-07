@@ -88,7 +88,7 @@ void UrgNode::initSetup()
   }
   else
   {
-    laser_pub_ = nh_.advertise<sensor_msgs::LaserScan>("scan", 20);
+    laser_pub_ = nh_.advertise<sensor_msgs::LaserScan>("hokuyo_scan", 20);
   }
 
   status_service_ = nh_.advertiseService("update_laser_status", &UrgNode::statusCallback, this);
