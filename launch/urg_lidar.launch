@@ -14,7 +14,7 @@
     <param name="serial_baud" value="10940"/>
     <param name="frame_id" value="hokuyo_lidar"/>
     <param name="calibrate_time" value="true"/>
-    <param name="publish_intensity" value="false"/>
+    <param name="publish_intensity" value="true"/>
     <param name="publish_multiecho" value="false"/>
     <param name="angle_min" value="-3.141596"/>
     <param name="angle_max" value="3.141596"/>
